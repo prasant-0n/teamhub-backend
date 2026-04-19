@@ -12,23 +12,17 @@ const sessionSchema = new mongoose.Schema(
     tenantId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Tenant",
-      default: null,
-      index: true
+      default: null
     },
 
     refreshTokenHash: {
       type: String,
       required: true,
-      index: true
+      unique: true
     },
 
-    userAgent: {
-      type: String
-    },
-
-    ipAddress: {
-      type: String
-    },
+    userAgent: String,
+    ipAddress: String,
 
     isRevoked: {
       type: Boolean,
@@ -38,8 +32,7 @@ const sessionSchema = new mongoose.Schema(
 
     expiresAt: {
       type: Date,
-      required: true,
-      index: true
+      required: true
     }
   },
   {
@@ -47,7 +40,10 @@ const sessionSchema = new mongoose.Schema(
   }
 );
 
-// optional: TTL index for auto cleanup
+// TTL index
 sessionSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
+
+// Compound index for user session queries
+sessionSchema.index({ userId: 1, isRevoked: 1 });
 
 export const Session = mongoose.model("Session", sessionSchema);
