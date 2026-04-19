@@ -29,6 +29,11 @@ const userSchema = new mongoose.Schema(
   }
 );
 
+
+userSchema.methods.comparePassword = async function (password) {
+  return bcrypt.compare(password, this.passwordHash);
+};
+
 // prevent returning password
 userSchema.methods.toJSON = function () {
   const obj = this.toObject();
