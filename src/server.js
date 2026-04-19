@@ -2,6 +2,7 @@ import app from "./app.js";
 import { config } from "./config/index.js";
 import { connectDB } from "./infrastructure/database/mongo.js";
 import { logger } from "./common/utils/logger.js";
+import { User } from "./modules/auth/user.model.js";
 
 const startServer = async () => {
   await connectDB();
@@ -11,4 +12,6 @@ const startServer = async () => {
   });
 };
 
+
+console.log("User model loaded:", User.modelName);
 startServer();
